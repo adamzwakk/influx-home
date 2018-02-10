@@ -8,4 +8,6 @@ $dotenv = new Dotenv\Dotenv(__DIR__);
 $dotenv->load();
 
 $n = new Nest();
-echo json_encode($n->getDevice());
+$nestDevices = $n->getDevices();
+
+echo json_encode($nestDevices);

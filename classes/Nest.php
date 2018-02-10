@@ -16,10 +16,12 @@ class Nest {
 	protected $nestPIN;
 	protected $client;
 	protected $accessToken;
+	protected $retryCount;
 
 	public function __construct(){
 		$this->nestID = getenv('NEST_ID');
 		$this->nestSecret = getenv('NEST_SECRET');
+		$this->retryCount = 0;
 
 		$this->client = new Client([
 		    'timeout'  => 20,
@@ -73,7 +75,7 @@ class Nest {
 		return $value;
 	}
 
-	public function getDevice(){
+	public function getDevices(){
 		try {
 			$onRedirect = function(RequestInterface $request, ResponseInterface $response, UriInterface $uri) {
 			    $this->db->insert("nest_settings", [
@@ -102,9 +104,12 @@ class Nest {
 
 			return $result->devices;
 		} catch (RequestException $e) {
-			if ($e->hasResponse()) {
-		        echo Psr7\str($e->getResponse());
-		    }
+			// TODO: For some reason this fails the first time, but always gets it with the new URL
+			if (!$this->retryCount) {
+				return $this->getDevice();
+		    } else {
+		    	echo Psr7\str($e->getResponse());
+		    }			
 		}
 
 		
