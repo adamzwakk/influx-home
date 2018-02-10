@@ -9,11 +9,13 @@
     "require": {
         "guzzlehttp/guzzle": "~6.0",
         "vlucas/phpdotenv": "^2.4",
-        "catfan/medoo": "^1.5"
+        "catfan/medoo": "^1.5",
+        "influxdb/influxdb-php": "^1.14"
     },
     "autoload": {
         "classmap": [
-          "classes/Nest.php"
+          "classes/Nest.php",
+          "classes/Influx.php"
         ]
     }
 }
