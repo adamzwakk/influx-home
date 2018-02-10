@@ -6,6 +6,8 @@ use GuzzleHttp\Exception\RequestException;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
+use InfluxDB\Point;
+use InfluxDB\Database;
 
 use Medoo\Medoo;
 
@@ -17,6 +19,8 @@ class Nest {
 	protected $client;
 	protected $accessToken;
 	protected $retryCount;
+	protected $ifclint;
+	protected $ifdatabase;
 
 	public function __construct(){
 		$this->nestID = getenv('NEST_ID');
@@ -26,6 +30,9 @@ class Nest {
 		$this->client = new Client([
 		    'timeout'  => 20,
 		]);
+
+		$this->ifclient = new InfluxDB\Client(getenv('INFLUX_IP'), 8086);
+		$this->ifdatabase = $this->ifclient->selectDB(getenv('INFLUX_DB'));
 
 		$this->db = new Medoo([
 			'database_type' => 'sqlite',
@@ -102,6 +109,8 @@ class Nest {
 
 			$result = json_decode($req->getBody());
 
+			$this->devices = $result->devices;
+
 			return $result->devices;
 		} catch (RequestException $e) {
 			// TODO: For some reason this fails the first time, but always gets it with the new URL
@@ -111,7 +120,21 @@ class Nest {
 		    	echo Psr7\str($e->getResponse());
 		    }			
 		}
+	}
 
-		
+	public function insertHouseTemps(){
+		foreach($this->devices->thermostats as $nd){
+			echo "Writing in the current temp ".$nd->ambient_temperature_c."C from ".$nd->name."...\n";
+			
+			$point = new Point(
+				'house_temp', 
+				$nd->ambient_temperature_c,
+				['thermostat_name'=>$nd->name],
+				['target_temp' => $nd->target_temperature_c],
+				time()
+			);
+
+			$result = $this->ifdatabase->writePoints([$point], Database::PRECISION_SECONDS);
+		}
 	}
 }
