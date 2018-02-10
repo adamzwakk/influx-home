@@ -1,6 +1,6 @@
 # Influx Home
 
-Just a bunch of scripts to insert data into a local InfluxDB instance for home monitoring. I've tried to make it modular/generic enough that anyone can
+Just a bunch of scripts to insert data into a local InfluxDB instance for home monitoring. I've tried to make it modular/generic enough that anyone can throw their vars/settings in, and away you go.
 
 Currently supports:
 - Nest (Home thermostat reading)
