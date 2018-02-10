@@ -1,0 +1,19 @@
+{
+    "name": "adamzwakk/influx-home",
+    "authors": [
+        {
+            "name": "adamzwakk",
+            "email": "shamist@gmail.com"
+        }
+    ],
+    "require": {
+        "guzzlehttp/guzzle": "~6.0",
+        "vlucas/phpdotenv": "^2.4",
+        "catfan/medoo": "^1.5"
+    },
+    "autoload": {
+        "classmap": [
+          "classes/Nest.php"
+        ]
+    }
+}
