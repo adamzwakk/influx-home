@@ -38,4 +38,12 @@ $scheduler->call(function () {
 
 })->everyMinute();
 
+$scheduler->call(function () {
+	// Call Transmission RPC every 1min
+
+    $ph = new Transmission();
+	$lightsOnCount = $ph->insertBandwidthStats();
+
+})->everyMinute();
+
 $scheduler->run();

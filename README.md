@@ -6,3 +6,4 @@ Starting with:
 - Nest
 - OpenWeatherMap
 - Philips HUE
+- Transmission
