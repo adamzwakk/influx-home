@@ -24,4 +24,16 @@ class Influx{
 
 		$result = $this->database->writePoints([$point], Database::PRECISION_SECONDS);
 	}
+
+	public function insertOutsideTemp($temp){
+		$point = new Point(
+			'outside_temp', 
+			$temp,
+			[],
+			[],
+			time()
+		);
+
+		$result = $this->database->writePoints([$point], Database::PRECISION_SECONDS);
+	}
 }

@@ -7,7 +7,14 @@ define('ROOT_DIR', __DIR__);
 $dotenv = new Dotenv\Dotenv(__DIR__);
 $dotenv->load();
 
+$MODULES = getenv('ENABLED_MODULES');
+
 $influx = new Influx();
+
+$owm = new OpenWeather();
+$temp = $owm->getOutsideTemp();
+echo "Writing in the outside temp ".$temp."C \n";
+$influx->insertOutsideTemp($temp);
 
 $n = new Nest();
 $nestDevices = $n->getDevices();
