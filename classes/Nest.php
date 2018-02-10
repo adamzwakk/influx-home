@@ -7,11 +7,10 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\UriInterface;
 use InfluxDB\Point;
-use InfluxDB\Database;
 
 use Medoo\Medoo;
 
-class Nest {
+class Nest extends InfluxHome {
 
 	protected $nestID;
 	protected $nestSecret;
@@ -19,10 +18,9 @@ class Nest {
 	protected $client;
 	protected $accessToken;
 	protected $retryCount;
-	protected $ifclint;
-	protected $ifdatabase;
 
 	public function __construct(){
+		parent::__construct();
 		$this->nestID = getenv('NEST_ID');
 		$this->nestSecret = getenv('NEST_SECRET');
 		$this->retryCount = 0;
@@ -30,9 +28,6 @@ class Nest {
 		$this->client = new Client([
 		    'timeout'  => 20,
 		]);
-
-		$this->ifclient = new InfluxDB\Client(getenv('INFLUX_IP'), 8086);
-		$this->ifdatabase = $this->ifclient->selectDB(getenv('INFLUX_DB'));
 
 		$this->db = new Medoo([
 			'database_type' => 'sqlite',
@@ -134,7 +129,7 @@ class Nest {
 				time()
 			);
 
-			$result = $this->ifdatabase->writePoints([$point], Database::PRECISION_SECONDS);
+			$this->writePoints([$point]);
 		}
 	}
 }

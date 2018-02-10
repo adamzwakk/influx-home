@@ -1,16 +1,16 @@
 <?php
 
 use InfluxDB\Point;
-use InfluxDB\Database;
 use Martial\Transmission\API\TorrentIdList;
 
-class Transmission{
+class Transmission extends InfluxHome{
 
 	protected $client;
 	protected $api;
 	protected $session;
 
 	public function __construct(){
+		parent::__construct();
 		$this->client = new GuzzleHttp\Client(['base_uri' => 'http://'.getenv('TRANSMISSION_HOST').':'.getenv('TRANSMISSION_PORT').'/transmission/rpc']);
 		$this->api = new \Martial\Transmission\API\RpcClient($this->client, getenv('TRANSMISSION_USER'), getenv('TRANSMISSION_PW'));
 
@@ -23,9 +23,6 @@ class Transmission{
 		} catch (\Martial\Transmission\API\TransmissionException $e) {
 		    die('API error: ' . $e->getResult());
 		}
-
-		$this->ifclient = new InfluxDB\Client(getenv('INFLUX_IP'), 8086);
-		$this->ifdatabase = $this->ifclient->selectDB(getenv('INFLUX_DB'));
 	}
 
 	public function insertBandwidthStats(){
@@ -78,7 +75,7 @@ class Transmission{
 		}
 
 		if(count($points)){
-			$result = $this->ifdatabase->writePoints($points, Database::PRECISION_SECONDS);
+			$this->writePoints($points);
 		}
 
 

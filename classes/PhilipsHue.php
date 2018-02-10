@@ -3,21 +3,16 @@
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7;
 use InfluxDB\Point;
-use InfluxDB\Database;
 
-class PhilipsHue{
+class PhilipsHue extends InfluxHome{
 
 	protected $client;
-	protected $ifclint;
-	protected $ifdatabase;
 
 	public function __construct(){
+		parent::__construct();
 		$this->client = new Client([
 		    'timeout'  => 20,
 		]);
-
-		$this->ifclient = new InfluxDB\Client(getenv('INFLUX_IP'), 8086);
-		$this->ifdatabase = $this->ifclient->selectDB(getenv('INFLUX_DB'));
 	}
 
 	private function getLights(){
@@ -43,7 +38,7 @@ class PhilipsHue{
 			time()
 		);
 		echo "Writing in ".$count." Philips HUE bulbs on now...\n";
-		$result = $this->ifdatabase->writePoints([$point], Database::PRECISION_SECONDS);
+		$this->writePoints([$point]);
 	}
 
 	

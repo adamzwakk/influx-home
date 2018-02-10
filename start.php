@@ -12,6 +12,7 @@ if(getenv('OWM_KEY') !== FALSE){
 	$temp = $owm->getOutsideTemp();
 	$owm->insertOutsideTemp();
 }
+
 if(getenv('NEST_ID') !== FALSE){
 	$n = new Nest();
 	$nestDevices = $n->getDevices();

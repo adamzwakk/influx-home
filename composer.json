@@ -17,6 +17,7 @@
     },
     "autoload": {
         "classmap": [
+          "classes/InfluxHome.php",
           "classes/Nest.php",
           "classes/OpenWeather.php",
           "classes/PhilipsHue.php",
