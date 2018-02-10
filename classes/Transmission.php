@@ -32,53 +32,31 @@ class Transmission extends InfluxHome{
 		$averageDown = 0;
 		$points = [];
 
-		$rates = $this->api->torrentGet($this->session,new TorrentIdList([]),[
-			'rateDownload',
-			'rateUpload'
-		]);
+		$rates = $this->api->sessionStats($this->session);
 
-		foreach($rates as $r){
-			if($r['rateDownload'] !== 0){
-				$dr[] = $r['rateDownload'];
-			}
+		$points[] = new Point(
+			'transmission.averageDownRate', 
+			$rates['downloadSpeed'],
+			[],
+			[],
+			time()
+		);
 
-			if($r['rateUpload'] !== 0){
-				$ur[] = $r['rateUpload'];
-			}
-		}
+		echo "Writing in the Transmission download speed ".($rates['downloadSpeed']/1000)."kb/s... \n";
 
-		if(count($dr)){
-			$averageDown = array_sum($dr)/count($dr);
-
-			$points[] = new Point(
-				'transmission.averageDownRate', 
-				$averageDown,
-				[],
-				[],
-				time()
-			);
-
-			echo "Writing in the Transmission download speed ".($averageDown/1000)."kb/s... \n";
-		}
-
-		if(count($ur)){
-			$averageUp = array_sum($ur)/count($ur);
-
-			$points[] = new Point(
-				'transmission.averageUpRate', 
-				$averageUp,
-				[],
-				[],
-				time()
-			);
-			echo "Writing in the Transmission upload speed ".($averageUp/1000)."kb/s... \n";
-		}
+		$points[] = new Point(
+			'transmission.averageUpRate', 
+			$rates['uploadSpeed'],
+			[],
+			[],
+			time()
+		);
+		echo "Writing in the Transmission upload speed ".($rates['uploadSpeed']/1000)."kb/s... \n";
+		
 
 		if(count($points)){
 			$this->writePoints($points);
 		}
-
-
 	}
 
 }
