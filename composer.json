@@ -17,7 +17,8 @@
         "classmap": [
           "classes/Nest.php",
           "classes/Influx.php",
-          "classes/OpenWeather.php"
+          "classes/OpenWeather.php",
+          "classes/PhilipsHue.php"
         ]
     }
 }

@@ -36,4 +36,16 @@ class Influx{
 
 		$result = $this->database->writePoints([$point], Database::PRECISION_SECONDS);
 	}
+
+	public function insertLightCount($num){
+		$point = new Point(
+			'lights_on', 
+			$num,
+			[],
+			[],
+			time()
+		);
+
+		$result = $this->database->writePoints([$point], Database::PRECISION_SECONDS);
+	}
 }
