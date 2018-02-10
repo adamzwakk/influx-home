@@ -11,7 +11,8 @@
         "vlucas/phpdotenv": "^2.4",
         "catfan/medoo": "^1.5",
         "influxdb/influxdb-php": "^1.14",
-        "cmfcmf/openweathermap-php-api": "^2.2"
+        "cmfcmf/openweathermap-php-api": "^2.2",
+        "peppeocchi/php-cron-scheduler": "^2.3"
     },
     "autoload": {
         "classmap": [
