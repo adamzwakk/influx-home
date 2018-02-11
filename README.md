@@ -7,6 +7,7 @@ Currently supports:
 - OpenWeatherMap (local weather/temperature)
 - Philips HUE (# of lights on)
 - Transmission (upload/download bandwidth)
+- Sabnzbd (download bandwidth)
 
 To get started:
 
