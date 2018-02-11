@@ -46,4 +46,12 @@ $scheduler->call(function () {
 
 })->everyMinute();
 
+$scheduler->call(function () {
+	// Call Sabnzbd API every 1min
+
+    $sb = new Sabnzbd();
+	$sb->insertBandwidthStats();
+
+})->everyMinute();
+
 $scheduler->run();

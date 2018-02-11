@@ -21,7 +21,8 @@
           "classes/Nest.php",
           "classes/OpenWeather.php",
           "classes/PhilipsHue.php",
-          "classes/Transmission.php"
+          "classes/Transmission.php",
+          "classes/Sabnzbd.php"
         ]
     }
 }

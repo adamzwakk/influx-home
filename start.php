@@ -29,4 +29,9 @@ if(getenv('TRANSMISSION_HOST') !== FALSE){
 	$trans->insertBandwidthStats();
 }
 
+if(getenv('SABNZBD_IP') !== FALSE){
+	$sb = new Sabnzbd();
+	$sb->insertBandwidthStats();
+}
+
 echo "Done!\n";

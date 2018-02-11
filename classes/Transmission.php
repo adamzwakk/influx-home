@@ -26,12 +26,7 @@ class Transmission extends InfluxHome{
 	}
 
 	public function insertBandwidthStats(){
-		$dr = [];
-		$ur = [];
-		$averageUp = 0;
-		$averageDown = 0;
 		$points = [];
-
 		$rates = $this->api->sessionStats($this->session);
 
 		$points[] = new Point(
