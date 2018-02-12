@@ -15,7 +15,8 @@ class OpenWeather extends InfluxHome{
 	}
 
 	public function getOutsideTemp(){
-		$weather = $this->owm->getWeather(intval(getenv('OWM_CITY')), 'metric', 'en');
+		$units = (getenv('TEMP_UNIT') === 'C') ? 'metric' : 'imperial';
+		$weather = $this->owm->getWeather(intval(getenv('OWM_CITY')), $units, 'en');
 		$this->weather = $weather;
 		
 		return $weather->temperature->getValue();
@@ -29,7 +30,7 @@ class OpenWeather extends InfluxHome{
 			[],
 			time()
 		);
-		echo "Writing in the outside temp ".$this->weather->temperature->getValue()."C... \n";
+		echo "Writing in the outside temp ".$this->weather->temperature->getValue().getenv('TEMP_UNIT')."... \n";
 		$this->writePoints([$point]);
 	}
 

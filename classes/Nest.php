@@ -119,22 +119,23 @@ class Nest extends InfluxHome {
 
 	public function insertHouseTemps(){
 		foreach($this->devices->thermostats as $nd){
-			$target = $nd->target_temperature_c;
+			$target = (getenv('TEMP_UNIT') === 'C') ? $nd->target_temperature_c : $nd->target_temperature_f;
+			$houseTemp = (getenv('TEMP_UNIT') === 'C') ? $nd->ambient_temperature_c : $nd->ambient_temperature_f;
 
 			if($nd->hvac_mode === 'eco' && $nd->previous_hvac_mode === 'heat')
 			{
-				$target = $nd->eco_temperature_low_c;
+				$target = (getenv('TEMP_UNIT') === 'C') ? $nd->eco_temperature_low_c : $nd->eco_temperature_low_f;
 			} 
-			else if($nd->hvac_mode === 'cool' && $nd->previous_hvac_mode === 'eco')
+			else if($nd->hvac_mode === 'eco' && $nd->previous_hvac_mode === 'cool')
 			{
-				$target = $nd->eco_temperature_high_c;
+				$target = (getenv('TEMP_UNIT') === 'C') ? $nd->eco_temperature_high_c : $nd->eco_temperature_high_f;
 			}
 
-			echo "Writing in the current temp ".$nd->ambient_temperature_c."C with a min target of ".$target." from ".$nd->name."...\n";
+			echo "Writing in the current temp ".$houseTemp.getenv('TEMP_UNIT')." with a min target of ".$target.getenv('TEMP_UNIT')." from ".$nd->name."...\n";
 			
 			$point = new Point(
 				'house_temp', 
-				$nd->ambient_temperature_c,
+				$houseTemp,
 				['thermostat_name'=>$nd->name],
 				['target_temp' => $target],
 				time()
